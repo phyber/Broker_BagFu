@@ -1,0 +1,21 @@
+﻿## Interface: 30000
+## Title: Broker_Bags
+## Notes: Keeps track of space left in your bags.
+## Notes-deDE: \195\156berwacht die Taschenpl\195\164tze.
+## Notes-frFR: Surveille et affiche la place disponible dans vos sacs.
+## Notes-koKR: 가방의 남은 빈 슬롯의 수를 표시합니다.
+## Notes-zhTW: 顯示背包的剩餘空格數量。
+## Notes-esES: Informa sobre el espacio restante en tus bolsas.
+## Notes-ruRU: Отслеживает оставшееся свободное место в ваших сумках.
+## Author: phyber
+## SavedVariables: BrokerBagsDB
+## Version: @project-version@
+## X-Category: Inventory
+
+#@no-lib-strip@
+embeds.xml
+#@no-lib-strip@
+
+Locales\locales.xml
+
+Core.lua
