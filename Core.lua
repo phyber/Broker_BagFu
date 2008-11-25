@@ -17,7 +17,7 @@ local defaults = {
 		openBagsAtBank = false,
 		openBagsAtVendor = false,
 		showBagsInTooltip = true,
-		showColours = true,
+		showColours = false,
 	},
 }
 local _G = _G
