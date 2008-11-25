@@ -10,7 +10,7 @@ L["Show depletion of bags"] = "가방의 사용 중인 슬롯의 수 대신에 �
 L["Bag Total"] = "총 슬롯수"
 L["Show total amount of space in bags"] = "가방안의 총 슬롯의 수를 표시합니다"
 
-L["Click to open your bags"] = "클릭시 가방 열기"
+L["Click|r to open your bags"] = "클릭시 가방 열기"
 
 L["Open Bags at Bank"] = "은행 방문시 가방열기"
 L["Open all of your bags when you're at the bank"] = "은행을 클릭했을 때 모든 가방을 자동으로 엽니다."

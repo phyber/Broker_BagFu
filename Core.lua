@@ -172,48 +172,43 @@ local function GetBagColour(percent)
 end
 
 function dataobj:OnTooltipShow()
-	self:AddLine("Click to open your bags")
+	self:AddLine(GetAddOnMetadata("Broker_Bags", "Title"))
+	self:AddLine("|cffffff00" .. L["Click|r to open your bags"])
+	self:AddLine("|cffffff00" .. L["Right-Click|r to open options menu"])
 end
 
-function dataobj:OnEnter()
-	GameTooltip:SetOwner(self, "ANCHOR_NONE")
-	GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT")
-	GameTooltip:ClearLines()
-	dataobj.OnTooltipShow(GameTooltip)
-	GameTooltip:Show()
-end
-
-function dataobj:OnLeave()
-	GameTooltip:Hide()
-end
-
-function dataobj:OnClick()
-	if not ContainerFrame1:IsShown() then
-		for i = 1, 4 do
-			if _G["ContainerFrame" .. (i + 1)]:IsShown() then
-				_G["ContainerFrame" .. (i + 1)]:Hide()
-			end
-		end
-		ToggleBackpack()
-		if ContainerFrame1:IsShown() then
+function dataobj:OnClick(button)
+	if button == "LeftButton" then
+		if not ContainerFrame1:IsShown() then
 			for i = 1, 4 do
-				local usable = true
-				local _, bagType = GetContainerNumFreeSlots(i)
-				if not db.includeAmmo and IsAmmoBag(bagType) then
-					usable = false
-				elseif not db.includeProfession and IsProfessionBag(bagType) then
-					usable = false
+				if _G["ContainerFrame" .. (i + 1)]:IsShown() then
+					_G["ContainerFrame" .. (i + 1)]:Hide()
 				end
-				if usable then ToggleBag(i)
+			end
+			ToggleBackpack()
+			if ContainerFrame1:IsShown() then
+				for i = 1, 4 do
+					local usable = true
+					local _, bagType = GetContainerNumFreeSlots(i)
+					if not db.includeAmmo and IsAmmoBag(bagType) then
+						usable = false
+					elseif not db.includeProfession and IsProfessionBag(bagType) then
+						usable = false
+					end
+					if usable then
+						ToggleBag(i)
+					end
+				end
+			end
+		else
+			for i = 0, 4 do
+				if _G["ContainerFrame" .. (i + 1)]:IsShown() then
+					_G["ContainerFrame" .. (i + 1)]:Hide()
 				end
 			end
 		end
-	else
-		for i = 0, 4 do
-			if _G["ContainerFrame" .. (i + 1)]:IsShown() then
-				_G["ContainerFrame" .. (i + 1)]:Hide()
-			end
-		end
+	elseif button == "RightButton" then
+		InterfaceOptionsFrame_OpenToCategory(LibStub("AceConfigDialog-3.0").BlizOptions["Broker_Bags"].frame)
 	end
 end
 

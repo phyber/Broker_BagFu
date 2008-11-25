@@ -13,7 +13,8 @@ L["Show depletion of bags"] = true
 L["Bag Total"] = true
 L["Show total amount of space in bags"] = true
 --
-L["Click to open your bags"] = true
+L["Click|r to open your bags"] = true
+L["Right-Click|r to open options menu"] = true
 --
 L["Open Bags at Bank"] = true
 L["Open all of your bags when you're at the bank"] = true

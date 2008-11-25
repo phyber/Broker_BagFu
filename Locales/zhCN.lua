@@ -10,6 +10,7 @@ L["Show depletion of bags"] = "显示背包剩余空间"
 L["Bag Total"] = "背包总容量"
 L["Show total amount of space in bags"] = "显示背包总容量大小"
 
-L["Click to open your bags"] = "点击打开你的背包"
+L["Click|r to open your bags"] = "点击打开你的背包"
+
 L["Open Bags at Bank"] = "打开银行同时打开背包"
 L["Open all of your bags when you're at the bank"] = "当你打开银行的时候,同时打开所有背包"

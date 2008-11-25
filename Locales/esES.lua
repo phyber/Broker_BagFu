@@ -10,4 +10,4 @@ L["Show depletion of bags"] = "Muestra el espacio restante en las bolsas"
 L["Bag Total"] = "Espacio total en bolsas"
 L["Show total amount of space in bags"] = "Muestra la cantidad de espacio total en tus bolsas"
 
-L["Click to open your bags"] = "Clic para abrir tus bolsas"
+L["Click|r to open your bags"] = "Clic para abrir tus bolsas"
