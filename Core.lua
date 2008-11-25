@@ -48,7 +48,7 @@ local function GetOptions()
 				type = "toggle",
 				order = 75,
 				name = L["Bags in Tooltip"],
-				desc = L["Show all bags in the Broker_Bags tooltip"],
+				desc = L["Show all bags in the Broker: Bags tooltip"],
 				get = function() return db.showBagsInTooltip end,
 				set = function() db.showBagsInTooltip = not db.showBagsInTooltip end,
 			},

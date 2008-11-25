@@ -25,4 +25,4 @@ L["Use Colours"] = true
 L["Use colouring to show level of bag fullness"] = true
 --
 L["Bags in Tooltip"] = true
-L["Show all bags in the Broker_Bags tooltip"] = true
+L["Show all bags in the Broker: Bags tooltip"] = true
