@@ -18,4 +18,6 @@ embeds.xml
 
 Locales\locales.xml
 
+LibDataBroker-1.1.lua
+
 Core.lua
