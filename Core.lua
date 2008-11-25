@@ -124,13 +124,13 @@ local function GetOptions()
 						Broker_Bags:RegisterEvent("MERCHANT_CLOSED", function() CloseAllBags() end)
 					else
 						Broker_Bags:UnregisterEvent("MERCHANT_SHOW")
-						Broker_Bags:UnregisterEvetn("MERCHANT_CLOSED")
+						Broker_Bags:UnregisterEvent("MERCHANT_CLOSED")
 					end
 				end,
 			},
 		},
 	}
-
+	return options
 end
 
 local function IsAmmoBag(bagType)
