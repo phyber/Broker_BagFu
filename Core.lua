@@ -41,7 +41,7 @@ local function GetOptions()
 				get = function() return db.showColours end,
 				set = function()
 					db.showColours = not db.showColours
-					Broker:Bags:BAG_UPDATE()
+					Broker_Bags:BAG_UPDATE()
 				end,
 			},
 			showBagsInTooltip = {
