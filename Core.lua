@@ -36,8 +36,8 @@ local function GetOptions()
 			showColours = {
 				type = "toggle",
 				order = 50,
-				name = "Use Colours",
-				desc = "Use colouring to show level of bag fullness",
+				name = L["Use Colours"],
+				desc = L["Use colouring to show level of bag fullness"],
 				get = function() return db.showColours end,
 				set = function()
 					db.showColours = not db.showColours
@@ -47,8 +47,8 @@ local function GetOptions()
 			showBagsInTooltip = {
 				type = "toggle",
 				order = 75,
-				name = "Bags in Tooltip",
-				desc = "Show all bags in the Broker_Bags tooltip",
+				name = L["Bags in Tooltip"],
+				desc = L["Show all bags in the Broker_Bags tooltip"],
 				get = function() return db.showBagsInTooltip end,
 				set = function() db.showBagsInTooltip = not db.showBagsInTooltip end,
 			},

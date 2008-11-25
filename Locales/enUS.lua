@@ -20,3 +20,9 @@ L["Open Bags at Bank"] = true
 L["Open all of your bags when you're at the bank"] = true
 L["Open Bags at Vendor"] = true
 L["Open all of your bags when you're at a vendor"] = true
+--
+L["Use Colours"] = true
+L["Use colouring to show level of bag fullness"] = true
+--
+L["Bags in Tooltip"] = true
+L["Show all bags in the Broker_Bags tooltip"] = true
