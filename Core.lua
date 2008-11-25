@@ -178,30 +178,35 @@ function dataobj:OnTooltipShow()
 		for i = 0, 4 do
 			local bagSize = GetContainerNumSlots(i)
 			if bagSize ~= nil and bagSize > 0 then
-				local name, icon
+				local name, quality, icon, _
 				if i == 0 then
 					name = GetBagName(0)
 					icon = "Interface\\Icons\\INV_Misc_Bag_08:16"
+					quality = select(4, GetItemQualityColor(1))
 				else
 					name = GetBagName(i)
-					icon = select(10, GetItemInfo(name))..":16"
+					_,_,quality,_,_,_,_,_,_,icon = GetItemInfo(name)
+					quality = select(4, GetItemQualityColor(quality))
+					icon = icon .. ":16"
 				end
 				local freeSlots = GetContainerNumFreeSlots(i)
 				local takenSlots = bagSize - freeSlots
 				local colour
 				if db.showColours then
 					colour = GetBagColour((bagSize - takenSlots) / bagSize)
+					name = string_format("%s%s%s", quality, name, "|r")
 				end
 				if db.showDepletion then
 					takenSlots = bagSize - takenSlots
 				end
-				local displayText
+				local textL, textR
+				textL = string_format("|T%s|t %s", icon, name)
 				if db.showTotal then
-					displayText = string_format("|T%s|t %s: %s%d/%d%s", icon, name, colour and colour or "", takenSlots, bagSize, colour and "|r" or "")
+					textR = string_format("%s%d/%d%s", colour and colour or "", takenSlots, bagSize, colour and "|r" or "")
 				else
-					displayText = string_format("|T%s|t %s: %s%d%s", icon, name, colour and colour or "", takenSlots, colour and "|r" or "")
+					textR = string_format("%s%d%s", colour and colour or "", takenSlots, colour and "|r" or "")
 				end
-				self:AddLine(displayText)
+				self:AddDoubleLine(textL, textR)
 			end
 		end
 	end
