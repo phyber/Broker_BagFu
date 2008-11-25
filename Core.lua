@@ -173,6 +173,38 @@ end
 
 function dataobj:OnTooltipShow()
 	self:AddLine(GetAddOnMetadata("Broker_Bags", "Title"))
+	-- Show the bags in the tooltip, if needed
+	if db.showBagsInTooltip then
+		for i = 0, 4 do
+			local bagSize = GetContainerNumSlots(i)
+			if bagSize ~= nil and bagSize > 0 then
+				local name, icon
+				if i == 0 then
+					name = GetBagName(0)
+					icon = "Interface\\Icons\\INV_Misc_Bag_08:16"
+				else
+					name = GetBagName(i)
+					icon = select(10, GetItemInfo(name))..":16"
+				end
+				local freeSlots = GetContainerNumFreeSlots(i)
+				local takenSlots = bagSize - freeSlots
+				local colour
+				if db.showColours then
+					colour = GetBagColour((bagSize - takenSlots) / bagSize)
+				end
+				if db.showDepletion then
+					takenSlots = bagSize - takenSlots
+				end
+				local displayText
+				if db.showTotal then
+					displayText = string_format("|T%s|t %s: %s%d/%d%s", icon, name, colour and colour or "", takenSlots, bagSize, colour and "|r" or "")
+				else
+					displayText = string_format("|T%s|t %s: %s%d%s", icon, name, colour and colour or "", takenSlots, colour and "|r" or "")
+				end
+				self:AddLine(displayText)
+			end
+		end
+	end
 	self:AddLine("|cffffff00" .. L["Click|r to open your bags"])
 	self:AddLine("|cffffff00" .. L["Right-Click|r to open options menu"])
 end
