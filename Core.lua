@@ -21,6 +21,12 @@ local defaults = {
 	},
 }
 local _G = _G
+local GetBagName = GetBagName
+local GetAddOnMetadata = GetAddOnMetadata
+local GetItemQualityColor = GetItemQualityColor
+local GetContainerNumSlots = GetContainerNumSlots
+local GetContainerNumFreeSlots = GetContainerNumFreeSlots
+local select = select
 local string_format = string.format
 
 local function GetOptions()
@@ -172,6 +178,7 @@ local function GetBagColour(percent)
 end
 
 function dataobj:OnTooltipShow()
+	-- Title, grab it from the TOC.
 	self:AddLine(GetAddOnMetadata("Broker_Bags", "Title"))
 	-- Show the bags in the tooltip, if needed
 	if db.showBagsInTooltip then
@@ -194,7 +201,7 @@ function dataobj:OnTooltipShow()
 				local colour
 				if db.showColours then
 					colour = GetBagColour((bagSize - takenSlots) / bagSize)
-					name = string_format("%s%s%s", quality, name, "|r")
+					name = string_format("%s%s|r", quality, name)
 				end
 				if db.showDepletion then
 					takenSlots = bagSize - takenSlots
@@ -210,6 +217,7 @@ function dataobj:OnTooltipShow()
 			end
 		end
 	end
+	-- Hints!
 	self:AddLine("|cffffff00" .. L["Click|r to open your bags"])
 	self:AddLine("|cffffff00" .. L["Right-Click|r to open options menu"])
 end
