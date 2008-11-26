@@ -1,4 +1,4 @@
-Broker_Bags = LibStub("AceAddon-3.0"):NewAddon("Broker_Bags", "AceEvent-3.0", "AceBucket-3.0", "AceConsole-3.0")
+Broker_Bags = LibStub("AceAddon-3.0"):NewAddon("Broker_Bags", "AceEvent-3.0", "AceBucket-3.0")
 local Broker_Bags, self = Broker_Bags, Broker_Bags
 local LDB = LibStub:GetLibrary("LibDataBroker-1.1")
 local L = LibStub("AceLocale-3.0"):GetLocale("Broker_Bags")
@@ -256,8 +256,6 @@ function Broker_Bags:OnInitialize()
 	-- Register the config
 	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("Broker_Bags", GetOptions)
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Broker_Bags", GetAddOnMetadata("Broker_Bags", "Title"))
-	-- Add slash command
-	self:RegisterChatCommand("broker_bags", function() InterfaceOptionsFrame_OpenToCategory(LibStub("AceConfigDialog-3.0").BlizOptions["Broker_Bags"].frame) end)
 end
 
 function Broker_Bags:OnEnable()
