@@ -1,4 +1,4 @@
-Broker_Bags = LibStub("AceAddon-3.0"):NewAddon("Broker_Bags", "AceBucket-3.0")
+Broker_Bags = LibStub("AceAddon-3.0"):NewAddon("Broker_Bags", "AceEvent-3.0", "AceBucket-3.0")
 local Broker_Bags, self = Broker_Bags, Broker_Bags
 local LDB = LibStub:GetLibrary("LibDataBroker-1.1")
 local L = LibStub("AceLocale-3.0"):GetLocale("Broker_Bags")
