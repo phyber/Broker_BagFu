@@ -28,6 +28,9 @@ local GetContainerNumSlots = GetContainerNumSlots
 local GetContainerNumFreeSlots = GetContainerNumFreeSlots
 local select = select
 local string_format = string.format
+-- Constants
+local KEYRING_CONTAINER = KEYRING_CONTAINER
+local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 
 local function GetOptions()
 	local options = {
@@ -182,7 +185,7 @@ function dataobj:OnTooltipShow()
 	self:AddLine(GetAddOnMetadata("Broker_Bags", "Title"))
 	-- Show the bags in the tooltip, if needed
 	if db.showBagsInTooltip then
-		for i = 0, 4 do
+		for i = 0, NUM_BAG_SLOTS do
 			local bagSize = GetContainerNumSlots(i)
 			if bagSize ~= nil and bagSize > 0 then
 				local name, quality, icon, _
@@ -224,15 +227,22 @@ end
 
 function dataobj:OnClick(button)
 	if button == "LeftButton" then
+		-- If he shift key is held, open all bags even if the user didn't ask for ammo/profession
+		local shifted = IsShiftKeyDown()
+		-- Open only the keyring if Control is pressed
+		if IsControlKeyDown() then
+			ToggleBag(KEYRING_CONTAINER)
+			return
+		end
 		if not ContainerFrame1:IsShown() then
-			for i = 1, 4 do
+			for i = 1, NUM_BAG_SLOTS do
 				if _G["ContainerFrame" .. (i + 1)]:IsShown() then
 					_G["ContainerFrame" .. (i + 1)]:Hide()
 				end
 			end
 			ToggleBackpack()
 			if ContainerFrame1:IsShown() then
-				for i = 1, 4 do
+				for i = 1, NUM_BAG_SLOTS do
 					local usable = true
 					local _, bagType = GetContainerNumFreeSlots(i)
 					if not db.includeAmmo and IsAmmoBag(bagType) then
@@ -240,13 +250,13 @@ function dataobj:OnClick(button)
 					elseif not db.includeProfession and IsProfessionBag(bagType) then
 						usable = false
 					end
-					if usable then
+					if usable or shifted then
 						ToggleBag(i)
 					end
 				end
 			end
 		else
-			for i = 0, 4 do
+			for i = 0, NUM_BAG_SLOTS do
 				if _G["ContainerFrame" .. (i + 1)]:IsShown() then
 					_G["ContainerFrame" .. (i + 1)]:Hide()
 				end
@@ -273,7 +283,7 @@ end
 function Broker_Bags:BAG_UPDATE()
 	local totalSlots = 0
 	local takenSlots = 0
-	for i = 0, 4 do
+	for i = 0, NUM_BAG_SLOTS do
 		local usable = true
 		local freeSlots, bagType = GetContainerNumFreeSlots(i)
 
