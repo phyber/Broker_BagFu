@@ -36,6 +36,7 @@ local function GetOptions()
 	local options = {
 		type = "group",
 		name = GetAddOnMetadata("Broker_Bags", "Title"),
+		get = function(info) return db[info[#info]] end,
 		args = {
 			bbdesc = {
 				type = "description",
@@ -47,7 +48,6 @@ local function GetOptions()
 				order = 50,
 				name = L["Use Colours"],
 				desc = L["Use colouring to show level of bag fullness"],
-				get = function() return db.showColours end,
 				set = function()
 					db.showColours = not db.showColours
 					Broker_Bags:BAG_UPDATE()
@@ -58,7 +58,6 @@ local function GetOptions()
 				order = 75,
 				name = L["Bags in Tooltip"],
 				desc = L["Show all bags in the Broker: Bags tooltip"],
-				get = function() return db.showBagsInTooltip end,
 				set = function() db.showBagsInTooltip = not db.showBagsInTooltip end,
 			},
 			includeAmmo = {
@@ -66,7 +65,6 @@ local function GetOptions()
 				order = 100,
 				name = L["Ammo/Soul Bags"],
 				desc = L["Include ammo/soul bags"],
-				get = function() return db.includeAmmo end,
 				set = function()
 					db.includeAmmo = not db.includeAmmo
 					Broker_Bags:BAG_UPDATE()
@@ -77,7 +75,6 @@ local function GetOptions()
 				order = 200,
 				name = L["Profession Bags"],
 				desc = L["Include profession bags"],
-				get = function() return db.includeProfession end,
 				set = function()
 					db.includeProfession = not db.includeProfession
 					Broker_Bags:BAG_UPDATE()
@@ -88,7 +85,6 @@ local function GetOptions()
 				order = 300,
 				name = L["Bag Depletion"],
 				desc = L["Show depletion of bags"],
-				get = function() return db.showDepletion end,
 				set = function()
 					db.showDepletion = not db.showDepletion
 					Broker_Bags:BAG_UPDATE()
@@ -99,7 +95,6 @@ local function GetOptions()
 				order = 400,
 				name = L["Bag Total"],
 				desc = L["Show total amount of space in bags"],
-				get = function() return db.showTotal end,
 				set = function()
 					db.showTotal = not db.showTotal
 					Broker_Bags:BAG_UPDATE()
@@ -110,7 +105,6 @@ local function GetOptions()
 				order = 500,
 				name = L["Open Bags at Bank"],
 				desc = L["Open all of your bags when you're at the bank"],
-				get = function() return db.openBagsAtBank end,
 				set = function()
 					db.openBagsAtBank = not db.openBagsAtBank
 					if db.openBagsAtBank then
@@ -125,7 +119,6 @@ local function GetOptions()
 				order = 600,
 				name = L["Open Bags at Vendor"],
 				desc = L["Open all of your bags when you're at a vendor"],
-				get = function() return db.openBagsAtVendor end,
 				set = function()
 					db.openBagsAtVendor = not db.openBagsAtVendor
 					if db.openBagsAtVendor then
