@@ -1,4 +1,4 @@
-package-as: Broker_Bags
+package-as: Broker_BagFu
 
 externals:
 	Libs/LibStub: svn://svn.wowace.com/wow/libstub/mainline/tags/1.0
