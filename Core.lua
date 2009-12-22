@@ -1,11 +1,11 @@
-Broker_Bags = LibStub("AceAddon-3.0"):NewAddon("Broker_Bags", "AceEvent-3.0", "AceBucket-3.0")
-local Broker_Bags, self = Broker_Bags, Broker_Bags
+Broker_BagFu = LibStub("AceAddon-3.0"):NewAddon("Broker_BagFu", "AceEvent-3.0", "AceBucket-3.0")
+local Broker_BagFu, self = Broker_BagFu, Broker_BagFu
 local LDB = LibStub:GetLibrary("LibDataBroker-1.1")
-local L = LibStub("AceLocale-3.0"):GetLocale("Broker_Bags")
-local dataobj = LDB:NewDataObject("Broker_Bags", {
+local L = LibStub("AceLocale-3.0"):GetLocale("Broker_BagFu")
+local dataobj = LDB:NewDataObject("Broker_BagFu", {
 	type = "data source",
 	text = '?/?',
-	icon = "Interface\\AddOns\\Broker_Bags\\icon.tga",
+	icon = "Interface\\AddOns\\Broker_BagFu\\icon.tga",
 })
 local db
 local defaults = {
@@ -35,13 +35,13 @@ local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 local function GetOptions()
 	local options = {
 		type = "group",
-		name = GetAddOnMetadata("Broker_Bags", "Title"),
+		name = GetAddOnMetadata("Broker_BagFu", "Title"),
 		get = function(info) return db[info[#info]] end,
 		args = {
 			bbdesc = {
 				type = "description",
 				order = 0,
-				name = GetAddOnMetadata("Broker_Bags", "Notes"),
+				name = GetAddOnMetadata("Broker_BagFu", "Notes"),
 			},
 			showColours = {
 				type = "toggle",
@@ -50,7 +50,7 @@ local function GetOptions()
 				desc = L["Use colouring to show level of bag fullness"],
 				set = function()
 					db.showColours = not db.showColours
-					Broker_Bags:BAG_UPDATE()
+					Broker_BagFu:BAG_UPDATE()
 				end,
 			},
 			showBagsInTooltip = {
@@ -67,7 +67,7 @@ local function GetOptions()
 				desc = L["Include ammo/soul bags"],
 				set = function()
 					db.includeAmmo = not db.includeAmmo
-					Broker_Bags:BAG_UPDATE()
+					Broker_BagFu:BAG_UPDATE()
 				end,
 			},
 			includeProfession = {
@@ -77,7 +77,7 @@ local function GetOptions()
 				desc = L["Include profession bags"],
 				set = function()
 					db.includeProfession = not db.includeProfession
-					Broker_Bags:BAG_UPDATE()
+					Broker_BagFu:BAG_UPDATE()
 				end,
 			},
 			showDepletion = {
@@ -87,7 +87,7 @@ local function GetOptions()
 				desc = L["Show depletion of bags"],
 				set = function()
 					db.showDepletion = not db.showDepletion
-					Broker_Bags:BAG_UPDATE()
+					Broker_BagFu:BAG_UPDATE()
 				end,
 			},
 			showTotal = {
@@ -97,7 +97,7 @@ local function GetOptions()
 				desc = L["Show total amount of space in bags"],
 				set = function()
 					db.showTotal = not db.showTotal
-					Broker_Bags:BAG_UPDATE()
+					Broker_BagFu:BAG_UPDATE()
 				end,
 			},
 			openBagsAtBank = {
@@ -108,9 +108,9 @@ local function GetOptions()
 				set = function()
 					db.openBagsAtBank = not db.openBagsAtBank
 					if db.openBagsAtBank then
-						Broker_Bags:RegisterEvent("BANKFRAME_OPENED", function() OpenAllBags(true) end)
+						Broker_BagFu:RegisterEvent("BANKFRAME_OPENED", function() OpenAllBags(true) end)
 					else
-						Broker_Bags:UnregisterEvent("BANKFRAME_OPENED")
+						Broker_BagFu:UnregisterEvent("BANKFRAME_OPENED")
 					end
 				end,
 			},
@@ -122,11 +122,11 @@ local function GetOptions()
 				set = function()
 					db.openBagsAtVendor = not db.openBagsAtVendor
 					if db.openBagsAtVendor then
-						Broker_Bags:RegisterEvent("MERCHANT_SHOW", function() OpenAllBags(true) end)
-						Broker_Bags:RegisterEvent("MERCHANT_CLOSED", function() CloseAllBags() end)
+						Broker_BagFu:RegisterEvent("MERCHANT_SHOW", function() OpenAllBags(true) end)
+						Broker_BagFu:RegisterEvent("MERCHANT_CLOSED", function() CloseAllBags() end)
 					else
-						Broker_Bags:UnregisterEvent("MERCHANT_SHOW")
-						Broker_Bags:UnregisterEvent("MERCHANT_CLOSED")
+						Broker_BagFu:UnregisterEvent("MERCHANT_SHOW")
+						Broker_BagFu:UnregisterEvent("MERCHANT_CLOSED")
 					end
 				end,
 			},
@@ -175,7 +175,7 @@ end
 
 function dataobj:OnTooltipShow()
 	-- Title, grab it from the TOC.
-	self:AddLine(GetAddOnMetadata("Broker_Bags", "Title"))
+	self:AddLine(GetAddOnMetadata("Broker_BagFu", "Title"))
 	-- Show the bags in the tooltip, if needed
 	if db.showBagsInTooltip then
 		for i = 0, NUM_BAG_SLOTS do
@@ -257,24 +257,24 @@ function dataobj:OnClick(button)
 			end
 		end
 	elseif button == "RightButton" then
-		InterfaceOptionsFrame_OpenToCategory(LibStub("AceConfigDialog-3.0").BlizOptions["Broker_Bags"].frame)
+		InterfaceOptionsFrame_OpenToCategory(LibStub("AceConfigDialog-3.0").BlizOptions["Broker_BagFu"].frame)
 	end
 end
 
-function Broker_Bags:OnInitialize()
+function Broker_BagFu:OnInitialize()
 	-- Saved Vars
 	self.db = LibStub("AceDB-3.0"):New("BrokerBagsDB", defaults, "Default")
 	db = self.db.profile
 	-- Register the config
-	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("Broker_Bags", GetOptions)
-	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Broker_Bags", GetAddOnMetadata("Broker_Bags", "Title"))
+	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("Broker_BagFu", GetOptions)
+	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Broker_BagFu", GetAddOnMetadata("Broker_BagFu", "Title"))
 end
 
-function Broker_Bags:OnEnable()
+function Broker_BagFu:OnEnable()
 	self:RegisterBucketEvent("BAG_UPDATE", 1)
 end
 
-function Broker_Bags:BAG_UPDATE()
+function Broker_BagFu:BAG_UPDATE()
 	local totalSlots = 0
 	local takenSlots = 0
 	for i = 0, NUM_BAG_SLOTS do
