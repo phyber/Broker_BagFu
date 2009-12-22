@@ -1,4 +1,4 @@
-local L = LibStub("AceLocale-3.0"):NewLocale("Broker_Bags", "esES")
+local L = LibStub("AceLocale-3.0"):NewLocale("Broker_BagFu", "esES")
 if not L then return end
 --
 L["Ammo/Soul Bags"] = "Bolsas de Munici\195\179n/Almas"

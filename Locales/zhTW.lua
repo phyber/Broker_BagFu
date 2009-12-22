@@ -1,4 +1,4 @@
-local L = LibStub("AceLocale-3.0"):NewLocale("Broker_Bags", "zhTW")
+local L = LibStub("AceLocale-3.0"):NewLocale("Broker_BagFu", "zhTW")
 if not L then return end
 --
 L["Ammo/Soul Bags"] = "彈藥袋/靈魂碎片背包"

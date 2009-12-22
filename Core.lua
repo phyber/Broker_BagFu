@@ -257,7 +257,7 @@ function dataobj:OnClick(button)
 			end
 		end
 	elseif button == "RightButton" then
-		InterfaceOptionsFrame_OpenToCategory(LibStub("AceConfigDialog-3.0").BlizOptions["Broker_BagFu"].frame)
+		InterfaceOptionsFrame_OpenToCategory(GetAddOnMetadata("Broker_BagFu", "Title"))
 	end
 end
 
