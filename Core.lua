@@ -272,6 +272,20 @@ end
 
 function Broker_BagFu:OnEnable()
 	self:RegisterBucketEvent("BAG_UPDATE", 1)
+	-- Check for bank open option
+	if db.openBagsAtBank then
+		Broker_BagFu:RegisterEvent("BANKFRAME_OPENED", function() OpenAllBags(true) end)
+	else
+		Broker_BagFu:UnregisterEvent("BANKFRAME_OPENED")
+	end
+	-- Check for vendor open option
+	if db.openBagsAtVendor then
+		Broker_BagFu:RegisterEvent("MERCHANT_SHOW", function() OpenAllBags(true) end)
+		Broker_BagFu:RegisterEvent("MERCHANT_CLOSED", function() CloseAllBags() end)
+	else
+		Broker_BagFu:UnregisterEvent("MERCHANT_SHOW")
+		Broker_BagFu:UnregisterEvent("MERCHANT_CLOSED")
+	end
 end
 
 function Broker_BagFu:BAG_UPDATE()
