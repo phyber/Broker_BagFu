@@ -12,7 +12,6 @@ local defaults = {
 	profile = {
 		showDepletion = false,
 		includeProfession = true,
-		includeAmmo = false,
 		showTotal = true,
 		openBagsAtBank = false,
 		openBagsAtVendor = false,
@@ -29,7 +28,6 @@ local GetContainerNumFreeSlots = GetContainerNumFreeSlots
 local select = select
 local string_format = string.format
 -- Constants
-local KEYRING_CONTAINER = KEYRING_CONTAINER
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 
 local function GetOptions()
@@ -59,16 +57,6 @@ local function GetOptions()
 				name = L["Bags in Tooltip"],
 				desc = L["Show all bags in the Broker: Bags tooltip"],
 				set = function() db.showBagsInTooltip = not db.showBagsInTooltip end,
-			},
-			includeAmmo = {
-				type = "toggle",
-				order = 100,
-				name = L["Ammo/Soul Bags"],
-				desc = L["Include ammo/soul bags"],
-				set = function()
-					db.includeAmmo = not db.includeAmmo
-					Broker_BagFu:BAG_UPDATE()
-				end,
 			},
 			includeProfession = {
 				type = "toggle",
@@ -133,16 +121,6 @@ local function GetOptions()
 		},
 	}
 	return options
-end
-
-local function IsAmmoBag(bagType)
-	-- 4: Soul Bag
-	-- 2: Ammo Pouch
-	-- 1: Quiver
-	if bagType == 4 or bagType == 2 or bagType == 1 then
-		return true
-	end
-	return false
 end
 
 local function IsProfessionBag(bagType)
@@ -221,13 +199,6 @@ end
 
 function dataobj:OnClick(button)
 	if button == "LeftButton" then
-		-- If he shift key is held, open all bags even if the user didn't ask for ammo/profession
-		local shifted = IsShiftKeyDown()
-		-- Open only the keyring if Control is pressed
-		if IsControlKeyDown() then
-			ToggleBag(KEYRING_CONTAINER)
-			return
-		end
 		if not ContainerFrame1:IsShown() then
 			for i = 1, NUM_BAG_SLOTS do
 				if _G["ContainerFrame" .. (i + 1)]:IsShown() then
@@ -239,12 +210,10 @@ function dataobj:OnClick(button)
 				for i = 1, NUM_BAG_SLOTS do
 					local usable = true
 					local _, bagType = GetContainerNumFreeSlots(i)
-					if not db.includeAmmo and IsAmmoBag(bagType) then
-						usable = false
-					elseif not db.includeProfession and IsProfessionBag(bagType) then
+					if not db.includeProfession and IsProfessionBag(bagType) then
 						usable = false
 					end
-					if usable or shifted then
+					if usable or IsShiftKeyDown() then
 						ToggleBag(i)
 					end
 				end
@@ -296,9 +265,7 @@ function Broker_BagFu:BAG_UPDATE()
 		local freeSlots, bagType = GetContainerNumFreeSlots(i)
 
 		if i >= 1 then
-			if not db.includeAmmo and IsAmmoBag(bagType) then
-				usable = false
-			elseif not db.includeProfession and IsProfessionBag(bagType) then
+			if not db.includeProfession and IsProfessionBag(bagType) then
 				usable = false
 			end
 		end

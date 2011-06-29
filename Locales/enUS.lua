@@ -1,9 +1,6 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("Broker_BagFu", "enUS", true)
 if not L then return end
 --
-L["Ammo/Soul Bags"] = true
-L["Include ammo/soul bags"] = true
---
 L["Profession Bags"] = true
 L["Include profession bags"] = true
 --

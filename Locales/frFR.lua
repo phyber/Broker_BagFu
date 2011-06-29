@@ -1,10 +1,8 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("Broker_BagFu", "frFR")
 if not L then return end
 --
-L["Ammo/Soul Bags"] = "Munitions/Sacs d'\195\162me"
 L["Profession Bags"] = "Sacs de profession"
 L["Bag Depletion"] = "Espace libre"
-L["Include ammo/soul bags"] = "Inclure munitions/sacs d'\195\162me."
 L["Include profession bags"] = "Inclure les sacs de profession."
 L["Show depletion of bags"] = "Montrer l'espace libre"
 L["Bag Total"] = "Total des sacs"
