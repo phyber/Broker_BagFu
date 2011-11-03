@@ -126,6 +126,7 @@ end
 local function IsProfessionBag(bagType)
 	-- 1024: Mining Bag
 	-- 512: Gem Bag
+	-- 256: Unused
 	-- 128: Engineering Bag
 	-- 64: Enchanting Bag
 	-- 32: Herb Bag
@@ -175,7 +176,7 @@ function dataobj:OnTooltipShow()
 				local colour
 				if db.showColours then
 					colour = GetBagColour((bagSize - takenSlots) / bagSize)
-					name = string_format("%s%s|r", quality, name)
+					name = string_format("|c%s%s|r", quality, name)
 				end
 				if db.showDepletion then
 					takenSlots = bagSize - takenSlots
