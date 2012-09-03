@@ -256,6 +256,8 @@ function Broker_BagFu:OnEnable()
 		Broker_BagFu:UnregisterEvent("MERCHANT_SHOW")
 		Broker_BagFu:UnregisterEvent("MERCHANT_CLOSED")
 	end
+	-- Force a BAG_UPDATE since it no longer seems to fire at PLAYER_LOGIN since 5.0.4
+	self:BAG_UPDATE()
 end
 
 function Broker_BagFu:BAG_UPDATE()
