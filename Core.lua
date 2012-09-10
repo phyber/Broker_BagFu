@@ -195,7 +195,6 @@ function dataobj:OnTooltipShow()
 	-- Hints!
 	self:AddLine("|cffffff00" .. L["Click|r to open your bags"])
 	self:AddLine("|cffffff00" .. L["Right-Click|r to open options menu"])
-	self:AddLine("|cffffff00" .. L["Ctrl-Click|r to open keyring"])
 end
 
 function dataobj:OnClick(button)

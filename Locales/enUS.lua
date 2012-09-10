@@ -12,7 +12,6 @@ L["Show total amount of space in bags"] = true
 --
 L["Click|r to open your bags"] = true
 L["Right-Click|r to open options menu"] = true
-L["Ctrl-Click|r to open keyring"] = true
 --
 L["Open Bags at Bank"] = true
 L["Open all of your bags when you're at the bank"] = true
