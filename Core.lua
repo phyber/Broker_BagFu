@@ -1,4 +1,4 @@
-Broker_BagFu = LibStub("AceAddon-3.0"):NewAddon("Broker_BagFu", "AceEvent-3.0", "AceBucket-3.0")
+Broker_BagFu = LibStub("AceAddon-3.0"):NewAddon("Broker_BagFu", "AceEvent-3.0")
 local Broker_BagFu, self = Broker_BagFu, Broker_BagFu
 local LDB = LibStub:GetLibrary("LibDataBroker-1.1")
 local L = LibStub("AceLocale-3.0"):GetLocale("Broker_BagFu")
@@ -25,8 +25,9 @@ local GetAddOnMetadata = GetAddOnMetadata
 local GetItemQualityColor = GetItemQualityColor
 local GetContainerNumSlots = GetContainerNumSlots
 local GetContainerNumFreeSlots = GetContainerNumFreeSlots
+local IsShiftKeyDown = IsShiftKeyDown
+local ToggleBackpack = ToggleBackpack
 local select = select
-local string_format = string.format
 -- Constants
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 
@@ -48,7 +49,7 @@ local function GetOptions()
 				desc = L["Use colouring to show level of bag fullness"],
 				set = function()
 					db.showColours = not db.showColours
-					Broker_BagFu:BAG_UPDATE()
+					Broker_BagFu:BAG_UPDATE_DELAYED()
 				end,
 			},
 			showBagsInTooltip = {
@@ -65,7 +66,7 @@ local function GetOptions()
 				desc = L["Include profession bags"],
 				set = function()
 					db.includeProfession = not db.includeProfession
-					Broker_BagFu:BAG_UPDATE()
+					Broker_BagFu:BAG_UPDATE_DELAYED()
 				end,
 			},
 			showDepletion = {
@@ -75,7 +76,7 @@ local function GetOptions()
 				desc = L["Show depletion of bags"],
 				set = function()
 					db.showDepletion = not db.showDepletion
-					Broker_BagFu:BAG_UPDATE()
+					Broker_BagFu:BAG_UPDATE_DELAYED()
 				end,
 			},
 			showTotal = {
@@ -85,7 +86,7 @@ local function GetOptions()
 				desc = L["Show total amount of space in bags"],
 				set = function()
 					db.showTotal = not db.showTotal
-					Broker_BagFu:BAG_UPDATE()
+					Broker_BagFu:BAG_UPDATE_DELAYED()
 				end,
 			},
 			openBagsAtBank = {
@@ -123,19 +124,31 @@ local function GetOptions()
 	return options
 end
 
-local function IsProfessionBag(bagType)
-	-- 1024: Mining Bag
-	-- 512: Gem Bag
-	-- 256: Unused
-	-- 128: Engineering Bag
-	-- 64: Enchanting Bag
-	-- 32: Herb Bag
-	-- 16: Inscription Bag
-	-- 8: Leatherworking Bag
-	if bagType == 1024 or bagType == 512 or bagType == 128 or bagType == 64 or bagType == 32 or bagType == 16 or bagType == 8 then
-		return true
+local IsProfessionBag
+do
+	local bagTypes = {
+		-- 1048576: Tackle Box
+		[0x100000] = true,
+		-- 65536: Cooking Bag
+		[0x10000] = true,
+		-- 1024: Mining Bag
+		[0x0400] = true,
+		-- 512: Gem Bag
+		[0x0200] = true,
+		-- 128: Engineering Bag
+		[0x0080] = true,
+		-- 64: Enchanting Bag
+		[0x0040] = true,
+		-- 32: Herb Bag
+		[0x0020] = true,
+		-- 16: Inscription Bag
+		[0x0010] = true,
+		-- 8: Leatherworking Bag
+		[0x0008] = true,
+	}
+	IsProfessionBag = function(bagType)
+		return bagTypes[bagType] or false
 	end
-	return false
 end
 
 local function GetBagColour(percent)
@@ -149,7 +162,7 @@ local function GetBagColour(percent)
 	else
 		r, g, b = 2 - percent * 2, 1, 0
 	end
-	return string_format("|cff%02x%02x%02x", r * 255, g * 255, b * 255)
+	return ("|cff%02x%02x%02x"):format(r * 255, g * 255, b * 255)
 end
 
 function dataobj:OnTooltipShow()
@@ -176,17 +189,17 @@ function dataobj:OnTooltipShow()
 				local colour
 				if db.showColours then
 					colour = GetBagColour((bagSize - takenSlots) / bagSize)
-					name = string_format("|c%s%s|r", quality, name)
+					name = ("|c%s%s|r"):format(quality, name)
 				end
 				if db.showDepletion then
 					takenSlots = bagSize - takenSlots
 				end
 				local textL, textR
-				textL = string_format("|T%s|t %s", icon, name)
+				textL = ("|T%s|t %s"):format(icon, name)
 				if db.showTotal then
-					textR = string_format("%s%d/%d%s", colour and colour or "", takenSlots, bagSize, colour and "|r" or "")
+					textR = ("%s%d/%d%s"):format(colour and colour or "", takenSlots, bagSize, colour and "|r" or "")
 				else
-					textR = string_format("%s%d%s", colour and colour or "", takenSlots, colour and "|r" or "")
+					textR = ("%s%d%s"):format(colour and colour or "", takenSlots, colour and "|r" or "")
 				end
 				self:AddDoubleLine(textL, textR)
 			end
@@ -240,7 +253,7 @@ function Broker_BagFu:OnInitialize()
 end
 
 function Broker_BagFu:OnEnable()
-	self:RegisterBucketEvent("BAG_UPDATE", 1)
+	self:RegisterEvent("BAG_UPDATE_DELAYED")
 	-- Check for bank open option
 	if db.openBagsAtBank then
 		Broker_BagFu:RegisterEvent("BANKFRAME_OPENED", function() OpenAllBags(true) end)
@@ -256,10 +269,10 @@ function Broker_BagFu:OnEnable()
 		Broker_BagFu:UnregisterEvent("MERCHANT_CLOSED")
 	end
 	-- Force a BAG_UPDATE since it no longer seems to fire at PLAYER_LOGIN since 5.0.4
-	self:BAG_UPDATE()
+	self:BAG_UPDATE_DELAYED()
 end
 
-function Broker_BagFu:BAG_UPDATE()
+function Broker_BagFu:BAG_UPDATE_DELAYED()
 	local totalSlots = 0
 	local takenSlots = 0
 	for i = 0, NUM_BAG_SLOTS do
@@ -288,9 +301,9 @@ function Broker_BagFu:BAG_UPDATE()
 	end
 	local displayText
 	if db.showTotal then
-		displayText = string_format("%s%d/%d%s", colour and colour or "", takenSlots, totalSlots, colour and "|r" or "")
+		displayText = ("%s%d/%d%s"):format(colour and colour or "", takenSlots, totalSlots, colour and "|r" or "")
 	else
-		displayText = string_format("%s%d%s", colour and colour or "", takenSlots, colour and "|r" or "")
+		displayText = ("%s%d%s"):format(colour and colour or "", takenSlots, colour and "|r" or "")
 	end
 	dataobj.text = displayText
 end
