@@ -36,6 +36,10 @@ local function GetOptions()
 		type = "group",
 		name = GetAddOnMetadata("Broker_BagFu", "Title"),
 		get = function(info) return db[info[#info]] end,
+		set = function(info, value)
+			db[info[#info]] = value
+			Broker_BagFu:BAG_UPDATE_DELAYED()
+		end,
 		args = {
 			bbdesc = {
 				type = "description",
@@ -47,47 +51,47 @@ local function GetOptions()
 				order = 50,
 				name = L["Use Colours"],
 				desc = L["Use colouring to show level of bag fullness"],
-				set = function()
-					db.showColours = not db.showColours
-					Broker_BagFu:BAG_UPDATE_DELAYED()
-				end,
+			--	set = function()
+			--		db.showColours = not db.showColours
+			--		Broker_BagFu:BAG_UPDATE_DELAYED()
+			--	end,
 			},
 			showBagsInTooltip = {
 				type = "toggle",
 				order = 75,
 				name = L["Bags in Tooltip"],
 				desc = L["Show all bags in the Broker: Bags tooltip"],
-				set = function() db.showBagsInTooltip = not db.showBagsInTooltip end,
+			--	set = function() db.showBagsInTooltip = not db.showBagsInTooltip end,
 			},
 			includeProfession = {
 				type = "toggle",
 				order = 200,
 				name = L["Profession Bags"],
 				desc = L["Include profession bags"],
-				set = function()
-					db.includeProfession = not db.includeProfession
-					Broker_BagFu:BAG_UPDATE_DELAYED()
-				end,
+			--	set = function()
+			--		db.includeProfession = not db.includeProfession
+			--		Broker_BagFu:BAG_UPDATE_DELAYED()
+			--	end,
 			},
 			showDepletion = {
 				type = "toggle",
 				order = 300,
 				name = L["Bag Depletion"],
 				desc = L["Show depletion of bags"],
-				set = function()
-					db.showDepletion = not db.showDepletion
-					Broker_BagFu:BAG_UPDATE_DELAYED()
-				end,
+			--	set = function()
+			--		db.showDepletion = not db.showDepletion
+			--		Broker_BagFu:BAG_UPDATE_DELAYED()
+			--	end,
 			},
 			showTotal = {
 				type = "toggle",
 				order = 400,
 				name = L["Bag Total"],
 				desc = L["Show total amount of space in bags"],
-				set = function()
-					db.showTotal = not db.showTotal
-					Broker_BagFu:BAG_UPDATE_DELAYED()
-				end,
+			--	set = function()
+			--		db.showTotal = not db.showTotal
+			--		Broker_BagFu:BAG_UPDATE_DELAYED()
+			--	end,
 			},
 			openBagsAtBank = {
 				type = "toggle",
@@ -96,11 +100,7 @@ local function GetOptions()
 				desc = L["Open all of your bags when you're at the bank"],
 				set = function()
 					db.openBagsAtBank = not db.openBagsAtBank
-					if db.openBagsAtBank then
-						Broker_BagFu:RegisterEvent("BANKFRAME_OPENED", function() OpenAllBags(true) end)
-					else
-						Broker_BagFu:UnregisterEvent("BANKFRAME_OPENED")
-					end
+					Broker_BagFu:ToggleOpenAtBank()
 				end,
 			},
 			openBagsAtVendor = {
@@ -110,13 +110,7 @@ local function GetOptions()
 				desc = L["Open all of your bags when you're at a vendor"],
 				set = function()
 					db.openBagsAtVendor = not db.openBagsAtVendor
-					if db.openBagsAtVendor then
-						Broker_BagFu:RegisterEvent("MERCHANT_SHOW", function() OpenAllBags(true) end)
-						Broker_BagFu:RegisterEvent("MERCHANT_CLOSED", function() CloseAllBags() end)
-					else
-						Broker_BagFu:UnregisterEvent("MERCHANT_SHOW")
-						Broker_BagFu:UnregisterEvent("MERCHANT_CLOSED")
-					end
+					Broker_BagFu:ToggleOpenAtVendor()
 				end,
 			},
 		},
@@ -254,22 +248,34 @@ end
 
 function Broker_BagFu:OnEnable()
 	self:RegisterEvent("BAG_UPDATE_DELAYED")
-	-- Check for bank open option
+	self:ToggleOpenAtBank()
+	self:ToggleOpenAtVendor()
+	-- Force a BAG_UPDATE since it no longer seems to fire at PLAYER_LOGIN since 5.0.4
+	self:BAG_UPDATE_DELAYED()
+end
+
+function Broker_BagFu:ToggleOpenAtBank()
 	if db.openBagsAtBank then
-		Broker_BagFu:RegisterEvent("BANKFRAME_OPENED", function() OpenAllBags(true) end)
+		self:RegisterEvent("BANKFRAME_OPENED", function()
+			OpenAllBags(true)
+		end)
 	else
-		Broker_BagFu:UnregisterEvent("BANKFRAME_OPENED")
+		self:UnregisterEvent("BANKFRAME_OPENED")
 	end
-	-- Check for vendor open option
+end
+
+function Broker_BagFu:ToggleOpenAtVendor()
 	if db.openBagsAtVendor then
-		Broker_BagFu:RegisterEvent("MERCHANT_SHOW", function() OpenAllBags(true) end)
-		Broker_BagFu:RegisterEvent("MERCHANT_CLOSED", function() CloseAllBags() end)
+		Broker_BagFu:RegisterEvent("MERCHANT_SHOW", function()
+			OpenAllBags(true)
+		end)
+		Broker_BagFu:RegisterEvent("MERCHANT_CLOSED", function()
+			CloseAllBags()
+		end)
 	else
 		Broker_BagFu:UnregisterEvent("MERCHANT_SHOW")
 		Broker_BagFu:UnregisterEvent("MERCHANT_CLOSED")
 	end
-	-- Force a BAG_UPDATE since it no longer seems to fire at PLAYER_LOGIN since 5.0.4
-	self:BAG_UPDATE_DELAYED()
 end
 
 function Broker_BagFu:BAG_UPDATE_DELAYED()
