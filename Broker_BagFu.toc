@@ -1,4 +1,4 @@
-﻿## Interface: 50300
+﻿## Interface: 50400
 ## Title: Broker: BagFu
 ## Notes: Keeps track of space left in your bags.
 ## Notes-deDE: \195\156berwacht die Taschenpl\195\164tze.
