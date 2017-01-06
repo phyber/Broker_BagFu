@@ -14,7 +14,7 @@
 
 #@no-lib-strip@
 embeds.xml
-#@no-lib-strip@
+#@end-no-lib-strip@
 
 Locales\locales.xml
 
