@@ -288,7 +288,7 @@ end
 function Broker_BagFu:ToggleOpenAtBank()
     if db.openBagsAtBank then
         self:RegisterEvent("BANKFRAME_OPENED", function()
-            OpenAllBags(true)
+            OpenAllBags(nil)
         end)
     else
         self:UnregisterEvent("BANKFRAME_OPENED")
@@ -298,11 +298,11 @@ end
 function Broker_BagFu:ToggleOpenAtVendor()
     if db.openBagsAtVendor then
         Broker_BagFu:RegisterEvent("MERCHANT_SHOW", function()
-            OpenAllBags(true)
+            OpenAllBags(nil)
         end)
 
         Broker_BagFu:RegisterEvent("MERCHANT_CLOSED", function()
-            CloseAllBags()
+            CloseAllBags(nil)
         end)
     else
         Broker_BagFu:UnregisterEvent("MERCHANT_SHOW")
