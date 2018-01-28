@@ -270,8 +270,12 @@ function Broker_BagFu:OnInitialize()
     -- Saved Vars
     self.db = LibStub("AceDB-3.0"):New("BrokerBagsDB", defaults, "Default")
     db = self.db.profile
+
     -- Register the config
-    LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("Broker_BagFu", GetOptions)
+    LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable(
+        "Broker_BagFu",
+        GetOptions
+    )
     LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Broker_BagFu", ADDON_TITLE)
 end
 
