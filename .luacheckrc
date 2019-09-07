@@ -44,14 +44,17 @@ read_globals = {
     "GetContainerNumFreeSlots",
     "GetContainerNumSlots",
     "GetItemInfo",
+    "GetItemInfoInstant",
     "GetItemQualityColor",
     "InterfaceOptionsFrame_OpenToCategory",
     "IsShiftKeyDown",
+    "Item",
     "OpenAllBags",
     "ToggleBackpack",
     "ToggleBag",
 
     -- FrameXML Globals
+    "LE_ITEM_QUALITY_COMMON",
     "NUM_BAG_SLOTS",
 
     -- Frames
