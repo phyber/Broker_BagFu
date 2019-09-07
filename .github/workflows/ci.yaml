@@ -14,8 +14,11 @@ jobs:
         with:
           fetch-depth: 1
       - name: 'Install LuaRocks'
-        run: 'apt install luarocks'
+        run: |
+          sudo apt install luarocks
       - name: 'Install LuaCheck'
-        run: 'luarocks install --local luacheck'
+        run: |
+          luarocks install --local luacheck
       - name: 'Run LuaCheck'
-        run: '${HOME}/.luarocks/bin/luacheck . --no-color -q'
+        run: |
+          ${HOME}/.luarocks/bin/luacheck . --no-color -q
