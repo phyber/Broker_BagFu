@@ -3,6 +3,7 @@ Broker_BagFu = LibStub("AceAddon-3.0"):NewAddon("Broker_BagFu", "AceEvent-3.0")
 local Broker_BagFu, self = Broker_BagFu, Broker_BagFu
 local LDB = LibStub:GetLibrary("LibDataBroker-1.1")
 local L = LibStub("AceLocale-3.0"):GetLocale("Broker_BagFu")
+local icon = LibStub("LibDBIcon-1.0")
 
 -- LDB data object
 local dataobj = LDB:NewDataObject("Broker_BagFu", {
@@ -22,6 +23,9 @@ local defaults = {
         openBagsAtVendor = false,
         showBagsInTooltip = true,
         showColours = false,
+        minimap = {
+            hide = false,
+        },
     },
 }
 
@@ -110,6 +114,20 @@ local function GetOptions()
                 set = function()
                     db.openBagsAtVendor = not db.openBagsAtVendor
                     Broker_BagFu:ToggleOpenAtVendor()
+                end,
+            },
+            minimap = {
+                name = L["Minimap Icon"],
+                desc = L["Toggle minimap icon"],
+                type = "toggle",
+                get = function() return not db.minimap.hide end,
+                set = function()
+                    db.minimap.hide = not db.minimap.hide
+                    if db.minimap.hide then
+                        icon:Hide("Broker_BagFu")
+                    else
+                        icon:Show("Broker_BagFu")
+                    end
                 end,
             },
         },
@@ -270,6 +288,8 @@ function Broker_BagFu:OnInitialize()
     -- Saved Vars
     self.db = LibStub("AceDB-3.0"):New("BrokerBagsDB", defaults, "Default")
     db = self.db.profile
+
+    icon:Register("Broker_BagFu", dataobj, db.minimap)
 
     -- Register the config
     LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable(
