@@ -21,4 +21,4 @@ jobs:
           luarocks install --local luacheck
       - name: 'Run LuaCheck'
         run: |
-          ${HOME}/.luarocks/bin/luacheck . --no-color -q
+          ${HOME}/.luarocks/bin/luacheck .
