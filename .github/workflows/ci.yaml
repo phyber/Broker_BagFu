@@ -1,13 +1,13 @@
 ---
-name: 'Lua Testing'
+name: 'CI'
 on:
   push:
     branches:
       - 'master'
 
 jobs:
-  test:
-    name: 'Testing'
+  luacheck:
+    name: 'Luacheck'
     runs-on: 'ubuntu-latest'
     steps:
       - uses: 'actions/checkout@v1'
@@ -16,9 +16,9 @@ jobs:
       - name: 'Install LuaRocks'
         run: |
           sudo apt install luarocks
-      - name: 'Install LuaCheck'
+      - name: 'Install Luacheck'
         run: |
           luarocks install --local luacheck
-      - name: 'Run LuaCheck'
+      - name: 'Run Luacheck'
         run: |
           ${HOME}/.luarocks/bin/luacheck .
