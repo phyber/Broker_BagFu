@@ -23,3 +23,6 @@ L["Use colouring to show level of bag fullness"] = true
 --
 L["Bags in Tooltip"] = true
 L["Show all bags in the Broker: Bags tooltip"] = true
+--
+L["Minimap Icon"] = true
+L["Toggle minimap icon"] = true
