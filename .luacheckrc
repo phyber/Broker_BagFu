@@ -7,13 +7,11 @@ exclude_files = {
 }
 
 globals = {
-
+    -- Our globals
+    "Broker_BagFu",
 }
 
 read_globals = {
-    -- Our globals
-    "Broker_BagFu",
-
     -- Libraries
     "LibStub",
 
