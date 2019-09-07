@@ -37,6 +37,8 @@ local GetAddOnMetadata = GetAddOnMetadata
 local GetBagName = GetBagName
 local GetContainerNumFreeSlots = GetContainerNumFreeSlots
 local GetContainerNumSlots = GetContainerNumSlots
+local GetItemInfo = GetItemInfo
+local GetItemInfoInstant = GetItemInfoInstant
 local GetItemQualityColor = GetItemQualityColor
 local IsShiftKeyDown = IsShiftKeyDown
 local OpenAllBags = OpenAllBags
@@ -47,6 +49,8 @@ local ADDON_TITLE = GetAddOnMetadata("Broker_BagFu", "Title")
 local ADDON_NOTES = GetAddOnMetadata("Broker_BagFu", "Notes")
 
 -- Constants
+local BACKPACK_ICON = "Interface\\Icons\\INV_Misc_Bag_08:16"
+local LE_ITEM_QUALITY_COMMON = LE_ITEM_QUALITY_COMMON
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 
 local function GetOptions()
@@ -179,6 +183,40 @@ local function GetBagColour(percent)
     end
 
     return ("|cff%02x%02x%02x"):format(r * 255, g * 255, b * 255)
+end
+
+-- This function is responsible for getting the bag icons and quality.
+-- It will cache what it finds instead of repeatedly asking the client.
+local GetBagIconAndQuality
+do
+    local bagIcon = {}
+    local bagQuality = {}
+
+    GetBagIconAndQuality = function(name)
+        -- This returns less than the usual GetItemInfo() but should always
+        -- get us the itemID at least.
+        local itemID = GetItemInfoInstant(name)
+
+        -- If we already cached a result, use that.
+        if bagQuality[itemID] then
+            local icon = bagIcon[itemID]
+            local quality = bagIcon[itemID]
+
+            return quality, icon
+        end
+
+        -- Otherwise query the client for more info
+        local item = Item:CreateFromItemID(itemID)
+        item:ContinueOnItemLoad(function()
+            local _,_,quality,_,_,_,_,_,_,icon = GetItemInfo(name)
+
+            bagIcon[itemID] = icon
+            bagQuality[itemID] = quality
+        end)
+
+        -- Return a default icon and quality if we fell through.
+        return LE_ITEM_QUALITY_COMMON, BACKPACK_ICON
+    end
 end
 
 -- Shown on LDB dataobj mouseover.
