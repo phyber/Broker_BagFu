@@ -19,6 +19,13 @@ exclude_files = {
     ".luacheckrc",
 }
 
+-- Ignored warnings
+ignore = {
+    "211", -- Unused variable
+    "212", -- Unused argument
+    "431", -- Shadowed upvalue
+}
+
 -- Globals that we read/write
 globals = {
     -- Our globals
