@@ -9,3 +9,6 @@ L["Bag Total"] = "Taschen Gesamt"
 L["Show total amount of space in bags"] = "Zeige Gesamtanzahl an Taschenpl\195\164tzen"
 
 L["Click|r to open your bags"] = "Linksklick \195\182ffnet die Taschen"
+--
+L["Minimap Icon"] = "Minikarte Symbol"
+L["Toggle minimap icon"] = "Minikarte Symbol An/Aus"
