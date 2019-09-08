@@ -43,12 +43,10 @@ jobs:
         env:
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
         run: |
-          # -d Skip upload
           # -l Skip localisation replacements
           # -u Use Unix line-endings
           # -g Classic version
           /tmp/release.sh \
-            -d \
             -l \
             -u \
             -g 1.13.2
