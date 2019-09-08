@@ -16,6 +16,7 @@
 ## SavedVariables: BrokerBagsDB
 ## Version: @project-version@
 ## X-Category: Inventory
+## X-Curse-Project-ID: 21712
 
 #@no-lib-strip@
 embeds.xml
