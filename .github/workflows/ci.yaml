@@ -41,14 +41,21 @@ jobs:
           chmod 700 /tmp/release.sh
       - name: 'Release Classic Addon'
         run: |
+          # -d Skip upload
+          # -l Skip localisation replacements
+          # -u Use Unix line-endings
+          # -g Classic version
           /tmp/release.sh \
-            -d \      # Skip upload
-            -l \      # Skip localisation replacements
-            -u \      # Use Unix line-endings
-            -g 1.13.2 # Classic version
+            -d \
+            -l \
+            -u \
+            -g 1.13.2
       - name: 'Release Retail Addon'
         run: |
+          # -d Skip upload
+          # -l Skip localisation replacements
+          # -u Use Unix line-endings
           /tmp/release.sh \
-            -d \ # Skip upload
-            -l \ # Skip localisation replacements
-            -u   # Use Unix line-endings
+            -d \
+            -l \
+            -u
