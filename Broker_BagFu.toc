@@ -1,4 +1,9 @@
+#@retail@
 ## Interface: 80200
+#@end-retail@
+#@non-retail@
+# ## Interface: 11302
+#@end-non-retail@
 ## Title: Broker: BagFu
 ## Notes: Keeps track of space left in your bags.
 ## Notes-deDE: \195\156berwacht die Taschenpl\195\164tze.
