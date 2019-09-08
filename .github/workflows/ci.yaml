@@ -22,3 +22,33 @@ jobs:
       - name: 'Run Luacheck'
         run: |
           ${HOME}/.luarocks/bin/luacheck .
+  release:
+    name: 'Release Addon'
+    runs-on: 'ubuntu-latest'
+    needs: 'luacheck'
+    steps:
+      - uses: 'actions/checkout@v1'
+        with:
+          fetch-depth: 1
+      - name: 'Download Release Script'
+        run: |
+          curl \
+            --silent \
+            --show-error \
+            --output /tmp/release.sh
+            https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh
+
+          chmod 700 /tmp/release.sh
+      - name: 'Release Classic Addon'
+        run: |
+          /tmp/release.sh \
+            -d \      # Skip upload
+            -l \      # Skip localisation replacements
+            -u \      # Use Unix line-endings
+            -g 1.13.2 # Classic version
+      - name: 'Release Retail Addon'
+        run: |
+          /tmp/release.sh \
+            -d \ # Skip upload
+            -l \ # Skip localisation replacements
+            -u   # Use Unix line-endings
