@@ -1,2 +1,5 @@
 *~
 *.swp
+
+# Release script directory
+.release/
