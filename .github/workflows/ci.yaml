@@ -40,6 +40,8 @@ jobs:
 
           chmod 700 /tmp/release.sh
       - name: 'Release Classic Addon'
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
         run: |
           # -d Skip upload
           # -l Skip localisation replacements
