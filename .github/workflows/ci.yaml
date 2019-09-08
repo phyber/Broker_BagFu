@@ -35,7 +35,7 @@ jobs:
           curl \
             --silent \
             --show-error \
-            --output /tmp/release.sh
+            --output /tmp/release.sh \
             https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh
 
           chmod 700 /tmp/release.sh
