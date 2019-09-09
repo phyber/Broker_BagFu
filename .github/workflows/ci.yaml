@@ -39,6 +39,7 @@ jobs:
             https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh
 
           chmod 700 /tmp/release.sh
+      # Release Classic Addon on both CurseForge and WoWInterface
       - name: 'Release Classic Addon'
         env:
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
@@ -50,6 +51,8 @@ jobs:
             -l \
             -u \
             -g 1.13.2
+      # Release Retail Addon only on WoWInterface, as CurseForge is handled
+      # elsewhere
       - name: 'Release Retail Addon'
         run: |
           # -d Skip upload
