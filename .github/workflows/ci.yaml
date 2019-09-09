@@ -42,7 +42,8 @@ jobs:
       # WoWI-ID is specified as an argument due to WoWI not supporting both
       # Classic and Retail under a single addon, and how the release script
       # parses the TOC.
-      # release script arguments:
+      #
+      # Release script arguments:
       #   -d Skip upload
       #   -l Skip localisation replacements
       #   -u Use Unix line-endings
@@ -69,7 +70,6 @@ jobs:
           WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
         run: |
           /tmp/release.sh \
-            -d \
             -l \
             -u \
             -w 25276
