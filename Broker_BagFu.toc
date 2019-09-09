@@ -17,7 +17,6 @@
 ## Version: @project-version@
 ## X-Category: Inventory
 ## X-Curse-Project-ID: 21712
-## X-WoWI-ID: 25276
 
 #@no-lib-strip@
 embeds.xml
