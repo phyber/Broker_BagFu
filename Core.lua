@@ -200,7 +200,7 @@ do
         -- If we already cached a result, use that.
         if bagQuality[itemID] then
             local icon = bagIcon[itemID]
-            local quality = bagIcon[itemID]
+            local quality = bagQuality[itemID]
 
             return quality, icon
         end
@@ -229,49 +229,52 @@ function dataobj:OnTooltipShow()
             local bagSize = GetContainerNumSlots(i)
 
             if bagSize ~= nil and bagSize > 0 then
-                local name, quality, icon, _
-                name = GetBagName(i)
+                local name = GetBagName(i)
 
-                if i == 0 then
-                    icon = "Interface\\Icons\\INV_Misc_Bag_08:16"
-                    quality = select(4, GetItemQualityColor(1))
-                else
-                    _,_,quality,_,_,_,_,_,_,icon = GetItemInfo(name)
-                    quality = select(4, GetItemQualityColor(quality))
-                    icon = icon .. ":16"
+                if name then
+                    local quality, icon
+
+                    if i == 0 then
+                        icon = "Interface\\Icons\\INV_Misc_Bag_08:16"
+                        quality = select(4, GetItemQualityColor(1))
+                    else
+                        quality, icon = GetBagIconAndQuality(name)
+                        quality = select(4, GetItemQualityColor(quality))
+                        icon = icon .. ":16"
+                    end
+
+                    local freeSlots = GetContainerNumFreeSlots(i)
+                    local takenSlots = bagSize - freeSlots
+                    local colour
+
+                    if db.showColours then
+                        colour = GetBagColour((bagSize - takenSlots) / bagSize)
+                        name = ("|c%s%s|r"):format(quality, name)
+                    end
+
+                    if db.showDepletion then
+                        takenSlots = bagSize - takenSlots
+                    end
+
+                    local textL, textR
+                    textL = ("|T%s|t %s"):format(icon, name)
+
+                    if db.showTotal then
+                        textR = ("%s%d/%d%s"):format(
+                            colour and colour or "",
+                            takenSlots,
+                            bagSize,
+                            colour and "|r" or ""
+                        )
+                    else
+                        textR = ("%s%d%s"):format(
+                            colour and colour or "",
+                            takenSlots,
+                            colour and "|r" or ""
+                        )
+                    end
+                    self:AddDoubleLine(textL, textR)
                 end
-
-                local freeSlots = GetContainerNumFreeSlots(i)
-                local takenSlots = bagSize - freeSlots
-                local colour
-
-                if db.showColours then
-                    colour = GetBagColour((bagSize - takenSlots) / bagSize)
-                    name = ("|c%s%s|r"):format(quality, name)
-                end
-
-                if db.showDepletion then
-                    takenSlots = bagSize - takenSlots
-                end
-
-                local textL, textR
-                textL = ("|T%s|t %s"):format(icon, name)
-
-                if db.showTotal then
-                    textR = ("%s%d/%d%s"):format(
-                        colour and colour or "",
-                        takenSlots,
-                        bagSize,
-                        colour and "|r" or ""
-                    )
-                else
-                    textR = ("%s%d%s"):format(
-                        colour and colour or "",
-                        takenSlots,
-                        colour and "|r" or ""
-                    )
-                end
-                self:AddDoubleLine(textL, textR)
             end
         end
     end

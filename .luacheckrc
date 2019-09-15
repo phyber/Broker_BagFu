@@ -15,6 +15,7 @@ max_line_length = false
 
 -- We don't want to check externals Libs or this config file
 exclude_files = {
+    ".release/",
     "Libs/",
     ".luacheckrc",
 }
