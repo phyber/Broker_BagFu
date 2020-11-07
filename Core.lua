@@ -51,6 +51,51 @@ local ADDON_NOTES = GetAddOnMetadata("Broker_BagFu", "Notes")
 -- Constants
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 
+-- Current expansion ID for Retail
+local NUM_EXPANSIONS = 8
+
+-- A recent TOC for retail, where recent should be any valid TOC for the
+-- current expansion number
+local RECENT_RETAIL_TOC = 90001
+
+-- We need to know if we're in the Classic client at multiple points throughout
+-- the addon to decide which version of a function to use.
+-- This detection is incredibly brittle, but Blizzard has decided not to give
+-- us an easy way to reliably detect a Classic client.
+-- Hopefully these functions will allow us to catch both:
+--   - Retail version upgrades
+--   - Classic version upgrades
+-- without completely breaking the Classic client detection, which happens if
+-- relying on TOC alone.
+local IsClassic
+do
+    -- If the number of expansions returned by the client matches or is greater
+    -- than the number of expansions we expect to see for retail, it's probably
+    -- retail.
+    local function IsRetailExpansionCount()
+        return _G.GetNumExpansions() >= NUM_EXPANSIONS
+    end
+
+    -- If the version returned by the client is greater than or equal to a
+    -- recent Retail TOC, then it's probably retail.
+    local function IsRetailExpansionToc()
+        local version = select(4, GetBuildInfo())
+        return version >= RECENT_RETAIL_TOC
+    end
+
+    -- If the expansion count and TOC check pass our tests, we're probably on
+    -- retail.
+    local is_retail = IsRetailExpansionCount() and IsRetailExpansionToc()
+
+    -- The inverse of the above should be true for Classic.
+    local is_classic = not is_retail
+
+    IsClassic = function()
+        return is_classic
+    end
+end
+
+
 local function GetOptions()
     local options = {
         type = "group",
@@ -189,8 +234,14 @@ local GetBagIconAndQuality
 do
     local bagIcon = {}
     local bagQuality = {}
-    local ITEM_QUALITY_COMMON = Enum.ItemQuality.Common
     local BACKPACK_ICON = "Interface\\Icons\\INV_Misc_Bag_08:16"
+    local ITEM_QUALITY_COMMON
+
+    if IsClassic() then
+        ITEM_QUALITY_COMMON = LE_ITEM_QUALITY_COMMON
+    else
+        ITEM_QUALITY_COMMON = Enum.ItemQuality.Common
+    end
 
     GetBagIconAndQuality = function(name)
         -- This returns less than the usual GetItemInfo() but should always

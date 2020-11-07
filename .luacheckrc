@@ -42,6 +42,7 @@ read_globals = {
     "CloseAllBags",
     "GetAddOnMetadata",
     "GetBagName",
+    "GetBuildInfo",
     "GetContainerNumFreeSlots",
     "GetContainerNumSlots",
     "GetItemInfo",
@@ -56,6 +57,7 @@ read_globals = {
 
     -- FrameXML Globals
     "Enum",
+    "LE_ITEM_QUALITY_COMMON",
     "NUM_BAG_SLOTS",
 
     -- Frames
