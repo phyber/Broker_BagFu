@@ -49,8 +49,6 @@ local ADDON_TITLE = GetAddOnMetadata("Broker_BagFu", "Title")
 local ADDON_NOTES = GetAddOnMetadata("Broker_BagFu", "Notes")
 
 -- Constants
-local BACKPACK_ICON = "Interface\\Icons\\INV_Misc_Bag_08:16"
-local LE_ITEM_QUALITY_COMMON = LE_ITEM_QUALITY_COMMON
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 
 local function GetOptions()
@@ -60,6 +58,7 @@ local function GetOptions()
         get = function(info)
             return db[info[#info]]
         end,
+        k
         set = function(info, value)
             db[info[#info]] = value
             Broker_BagFu:BAG_UPDATE_DELAYED()
@@ -191,6 +190,8 @@ local GetBagIconAndQuality
 do
     local bagIcon = {}
     local bagQuality = {}
+    local ITEM_QUALITY_COMMON = Enum.ItemQuality.Common
+    local BACKPACK_ICON = "Interface\\Icons\\INV_Misc_Bag_08:16"
 
     GetBagIconAndQuality = function(name)
         -- This returns less than the usual GetItemInfo() but should always
@@ -215,7 +216,7 @@ do
         end)
 
         -- Return a default icon and quality if we fell through.
-        return LE_ITEM_QUALITY_COMMON, BACKPACK_ICON
+        return ITEM_QUALITY_COMMON, BACKPACK_ICON
     end
 end
 
@@ -239,16 +240,8 @@ function dataobj:OnTooltipShow()
                         quality = select(4, GetItemQualityColor(1))
                     else
                         quality, icon = GetBagIconAndQuality(name)
-
-                        if quality then
-                            quality = select(4, GetItemQualityColor(quality))
-                            icon = icon .. ":16"
-                        else
-                            -- WoW didn't respond quickly enough, use some sane
-                            -- defaults
-                            quality = select(4, GetItemQualityColor(1))
-                            icon = "Interface\\Icons\\INV_Misc_Bag_08:16"
-                        end
+                        quality = select(4, GetItemQualityColor(quality))
+                        icon = icon .. ":16"
                     end
 
                     local freeSlots = GetContainerNumFreeSlots(i)

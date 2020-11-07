@@ -55,7 +55,7 @@ read_globals = {
     "ToggleBag",
 
     -- FrameXML Globals
-    "LE_ITEM_QUALITY_COMMON",
+    "Enum",
     "NUM_BAG_SLOTS",
 
     -- Frames
