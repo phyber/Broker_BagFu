@@ -58,7 +58,6 @@ local function GetOptions()
         get = function(info)
             return db[info[#info]]
         end,
-        k
         set = function(info, value)
             db[info[#info]] = value
             Broker_BagFu:BAG_UPDATE_DELAYED()
