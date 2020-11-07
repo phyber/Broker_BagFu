@@ -239,8 +239,16 @@ function dataobj:OnTooltipShow()
                         quality = select(4, GetItemQualityColor(1))
                     else
                         quality, icon = GetBagIconAndQuality(name)
-                        quality = select(4, GetItemQualityColor(quality))
-                        icon = icon .. ":16"
+
+                        if quality then
+                            quality = select(4, GetItemQualityColor(quality))
+                            icon = icon .. ":16"
+                        else
+                            -- WoW didn't respond quickly enough, use some sane
+                            -- defaults
+                            quality = select(4, GetItemQualityColor(1))
+                            icon = "Interface\\Icons\\INV_Misc_Bag_08:16"
+                        end
                     end
 
                     local freeSlots = GetContainerNumFreeSlots(i)
