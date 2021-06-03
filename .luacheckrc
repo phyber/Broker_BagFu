@@ -59,6 +59,8 @@ read_globals = {
     "Enum",
     "LE_ITEM_QUALITY_COMMON",
     "NUM_BAG_SLOTS",
+    "WOW_PROJECT_ID",
+    "WOW_PROJECT_MAINLINE",
 
     -- Frames
     "ContainerFrame1",
