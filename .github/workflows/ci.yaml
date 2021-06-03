@@ -32,15 +32,6 @@ jobs:
       - uses: 'actions/checkout@v1'
         with:
           fetch-depth: 1
-      - name: 'Download Release Script'
-        run: |
-          curl \
-            --silent \
-            --show-error \
-            --output /tmp/release.sh \
-            https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh
-
-          chmod 700 /tmp/release.sh
       # WoWI-ID is specified as an argument due to WoWI not supporting both
       # Classic and Retail under a single addon, and how the release script
       # parses the TOC.
@@ -55,23 +46,28 @@ jobs:
       # Release Classic Addon on both CurseForge and WoWInterface.
       # No WoWI Classic for the moment, see
       # https://github.com/BigWigsMods/packager/issues/33
+      - name: 'Release Burning Crusade Classic Addon'
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+          WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+        uses: 'BigWigsMods/packager@v1'
+        with:
+          args: '-l -u -g bcc -w 25276'
       - name: 'Release Classic Addon'
         env:
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
           GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          /tmp/release.sh \
-            -l \
-            -u \
-            -g 1.13.2
+          WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+        uses: 'BigWigsMods/packager@v1'
+        with:
+          args: '-l -u -g classic -w 25276'
       # Release Retail Addon only on WoWInterface, as CurseForge is handled
       # elsewhere.
       - name: 'Release Retail Addon'
         env:
           GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
           WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
-        run: |
-          /tmp/release.sh \
-            -l \
-            -u \
-            -w 25276
+        uses: 'BigWigsMods/packager@v1'
+        with:
+          args: '-l -u -g retail -w 25276'
