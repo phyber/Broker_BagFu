@@ -38,6 +38,9 @@ read_globals = {
     -- Libraries
     "LibStub",
 
+    -- C API
+    "C_Container",
+
     -- API Functions
     "CloseAllBags",
     "GetAddOnMetadata",

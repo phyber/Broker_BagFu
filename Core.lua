@@ -35,9 +35,6 @@ local _G = _G
 local select = select
 local CloseAllBags = CloseAllBags
 local GetAddOnMetadata = GetAddOnMetadata
-local GetBagName = GetBagName
-local GetContainerNumFreeSlots = GetContainerNumFreeSlots
-local GetContainerNumSlots = GetContainerNumSlots
 local GetItemInfo = GetItemInfo
 local GetItemInfoInstant = GetItemInfoInstant
 local GetItemQualityColor = GetItemQualityColor
@@ -51,6 +48,11 @@ local ADDON_NOTES = GetAddOnMetadata("Broker_BagFu", "Notes")
 
 -- Constants
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS
+
+-- Locations of these functions vary between WoW versions.
+local GetBagName
+local GetContainerNumFreeSlots
+local GetContainerNumSlots
 
 -- We need to know if we're in the Classic client at multiple points throughout
 -- the addon to decide which version of a function to use.
@@ -66,6 +68,16 @@ do
     end
 end
 
+-- Bag functions are in different locations depending on game version.
+if IsClassic () then
+    GetBagName = _G.GetBagName
+    GetContainerNumFreeSlots = _G.GetContainerNumFreeSlots
+    GetContainerNumSlots = _G.GetContainerNumSlots
+else
+    GetBagName = C_Container.GetBagName
+    GetContainerNumFreeSlots = C_Container.GetContainerNumFreeSlots
+    GetContainerNumSlots = C_Container.GetContainerNumSlots
+end
 
 local function GetOptions()
     local options = {
