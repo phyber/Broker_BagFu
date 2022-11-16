@@ -17,6 +17,7 @@ local db
 local defaults = {
     profile = {
         showDepletion = false,
+        includeAmmo = true,
         includeProfession = true,
         showTotal = true,
         openBagsAtBank = false,
@@ -149,7 +150,29 @@ local function GetOptions()
             },
         },
     }
+
+    if IsClassic() then
+        options.args.includeAmmo = {
+            type = "toggle",
+            order = "100",
+            name = L["Ammo Bags"],
+            desc = L["Include ammo bags"],
+        }
+    end
+
     return options
+end
+
+-- Ammo bags exist again in Classic
+local function IsAmmoBag(bagType)
+    -- 4: Soul Bag
+    -- 2: Ammo Pouch
+    -- 1: Quiver
+    if bagType == 4 or bagType == 2 or bagType == 1 then
+        return true
+    end
+
+    return false
 end
 
 -- Handy function to tell if something is a profession bag.
@@ -264,12 +287,22 @@ function dataobj:OnTooltipShow()
                         icon = icon .. ":16"
                     end
 
-                    local freeSlots = GetContainerNumFreeSlots(i)
+                    local freeSlots, bagType = GetContainerNumFreeSlots(i)
                     local takenSlots = bagSize - freeSlots
                     local colour
 
                     if db.showColours then
-                        colour = GetBagColour((bagSize - takenSlots) / bagSize)
+                        local fillLevel
+
+                        -- Ammo bags reverse the colour, it's good for them to
+                        -- be full.
+                        if IsAmmoBag(bagType) then
+                            fillLevel = 1 - ((bagSize - takenSlots) / bagSize)
+                        else
+                            fillLevel = (bagSize - takenSlots) / bagSize
+                        end
+
+                        colour = GetBagColour(fillLevel)
                         name = ("|c%s%s|r"):format(quality, name)
                     end
 
@@ -322,6 +355,10 @@ function dataobj:OnClick(button)
                 for i = 1, NUM_BAG_SLOTS do
                     local usable = true
                     local _, bagType = GetContainerNumFreeSlots(i)
+
+                    if not db.includeAmmo and IsAmmoBag(bagType) then
+                        usable = false
+                    end
 
                     if not db.includeProfession and IsProfessionBag(bagType) then
                         usable = false
@@ -405,6 +442,10 @@ function Broker_BagFu:BAG_UPDATE_DELAYED()
         local freeSlots, bagType = GetContainerNumFreeSlots(i)
 
         if i >= 1 then
+            if not db.includeAmmo and IsAmmoBag(bagType) then
+                usable = false
+            end
+
             if not db.includeProfession and IsProfessionBag(bagType) then
                 usable = false
             end
@@ -412,6 +453,7 @@ function Broker_BagFu:BAG_UPDATE_DELAYED()
 
         if usable then
             local bagSize = GetContainerNumSlots(i)
+
             if bagSize ~= nil and bagSize > 0 then
                 totalSlots = totalSlots + bagSize
                 takenSlots = takenSlots + (bagSize - freeSlots)

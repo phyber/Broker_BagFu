@@ -12,7 +12,3 @@ externals:
     Libs/CallbackHandler-1.0: 'https://repos.wowace.com/wow/callbackhandler/tags/1.0.8/CallbackHandler-1.0'
     Libs/LibDBIcon-1.0: 'https://repos.wowace.com/wow/libdbicon-1-0/trunk/LibDBIcon-1.0'
     Libs/LibStub: 'https://repos.wowace.com/wow/libstub/tags/1.0.2-70000'
-
-manual-changelog:
-    filename: 'CHANGELOG.md'
-    markup-type: 'markdown'
