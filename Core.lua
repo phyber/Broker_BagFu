@@ -69,7 +69,7 @@ do
 end
 
 -- Bag functions are in different locations depending on game version.
-if IsClassic () then
+if _G.WOW_PROJECT_ID == _G.WOW_PROJECT_CLASSIC then
     GetBagName = _G.GetBagName
     GetContainerNumFreeSlots = _G.GetContainerNumFreeSlots
     GetContainerNumSlots = _G.GetContainerNumSlots
