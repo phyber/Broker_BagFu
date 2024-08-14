@@ -39,6 +39,7 @@ read_globals = {
     "LibStub",
 
     -- C API
+    "C_AddOns",
     "C_Container",
 
     -- API Functions
@@ -67,4 +68,5 @@ read_globals = {
 
     -- Frames
     "ContainerFrame1",
+    "Settings",
 }

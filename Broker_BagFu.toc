@@ -1,7 +1,8 @@
-## Interface: 100002
-## Interface-Retail: 100002
-## Interface-Classic: 11402
+## Interface: 110002
 ## Interface-BCC: 20504
+## Interface-Cata: 40400
+## Interface-Classic: 11503
+## Interface-Retail: 110002
 ## Title: Broker: BagFu
 ## Notes: Keeps track of space left in your bags.
 ## Notes-deDE: \195\156berwacht die Taschenpl\195\164tze.

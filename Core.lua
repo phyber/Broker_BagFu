@@ -4,6 +4,7 @@ local Broker_BagFu, self = Broker_BagFu, Broker_BagFu
 local LDB = LibStub:GetLibrary("LibDataBroker-1.1")
 local L = LibStub("AceLocale-3.0"):GetLocale("Broker_BagFu")
 local icon = LibStub("LibDBIcon-1.0")
+local _G = _G
 
 -- LDB data object
 local dataobj = LDB:NewDataObject("Broker_BagFu", {
@@ -13,6 +14,7 @@ local dataobj = LDB:NewDataObject("Broker_BagFu", {
 })
 
 -- Options database and defaults
+local addonOptionsFrameName
 local db
 local defaults = {
     profile = {
@@ -30,26 +32,8 @@ local defaults = {
     },
 }
 
---  Local functions and tables
-local _G = _G
-local select = select
-local CloseAllBags = CloseAllBags
-local GetAddOnMetadata = GetAddOnMetadata
-local GetItemInfo = GetItemInfo
-local GetItemInfoInstant = GetItemInfoInstant
-local GetItemQualityColor = GetItemQualityColor
-local IsShiftKeyDown = IsShiftKeyDown
-local OpenAllBags = OpenAllBags
-local ToggleBackpack = ToggleBackpack
-
--- Addon Metadata
-local ADDON_TITLE = GetAddOnMetadata("Broker_BagFu", "Title")
-local ADDON_NOTES = GetAddOnMetadata("Broker_BagFu", "Notes")
-
--- Constants
-local NUM_BAG_SLOTS = NUM_BAG_SLOTS
-
 -- Locations of these functions vary between WoW versions.
+local GetAddOnMetadata
 local GetBagName
 local GetContainerNumFreeSlots
 local GetContainerNumSlots
@@ -70,14 +54,33 @@ end
 
 -- Bag functions are in different locations depending on game version.
 if IsClassic () then
+    GetAddOnMetadata = _G.GetAddOnMetadata
     GetBagName = _G.GetBagName
     GetContainerNumFreeSlots = _G.GetContainerNumFreeSlots
     GetContainerNumSlots = _G.GetContainerNumSlots
 else
+    GetAddOnMetadata = C_AddOns.GetAddOnMetadata
     GetBagName = C_Container.GetBagName
     GetContainerNumFreeSlots = C_Container.GetContainerNumFreeSlots
     GetContainerNumSlots = C_Container.GetContainerNumSlots
 end
+
+--  Local functions and tables
+local select = select
+local CloseAllBags = CloseAllBags
+local GetItemInfo = GetItemInfo
+local GetItemInfoInstant = GetItemInfoInstant
+local GetItemQualityColor = GetItemQualityColor
+local IsShiftKeyDown = IsShiftKeyDown
+local OpenAllBags = OpenAllBags
+local ToggleBackpack = ToggleBackpack
+
+-- Addon Metadata
+local ADDON_TITLE = GetAddOnMetadata("Broker_BagFu", "Title")
+local ADDON_NOTES = GetAddOnMetadata("Broker_BagFu", "Notes")
+
+-- Constants
+local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 
 local function GetOptions()
     local options = {
@@ -173,6 +176,14 @@ local function GetOptions()
     end
 
     return options
+end
+
+local function OpenOptions()
+    if Settings and Settings.OpenToCategory then
+        Settings.OpenToCategory(addonOptionsFrameName)
+    else
+        InterfaceOptionsFrame_OpenToCategory(addonOptionsFrameName)
+    end
 end
 
 -- Ammo bags exist again in Classic
@@ -391,11 +402,13 @@ function dataobj:OnClick(button)
             end
         end
     elseif button == "RightButton" then
-        InterfaceOptionsFrame_OpenToCategory(ADDON_TITLE)
+        OpenOptions()
     end
 end
 
 function Broker_BagFu:OnInitialize()
+    local _
+
     -- Saved Vars
     self.db = LibStub("AceDB-3.0"):New("BrokerBagsDB", defaults, "Default")
     db = self.db.profile
@@ -407,7 +420,11 @@ function Broker_BagFu:OnInitialize()
         "Broker_BagFu",
         GetOptions
     )
-    LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Broker_BagFu", ADDON_TITLE)
+
+    _, addonOptionsFrameName = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(
+        "Broker_BagFu",
+        ADDON_TITLE
+    )
 end
 
 function Broker_BagFu:OnEnable()
